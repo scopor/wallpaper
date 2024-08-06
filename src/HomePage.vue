@@ -83,7 +83,7 @@ export default defineComponent({
 
       if (clickX < imgWidth / 3) {
         prevWallpaper();
-      } else if (clickX > imgWidth / 6) {
+      } else if (clickX > 2 * imgWidth / 3) {
         nextWallpaper();
       } else {
         openFullscreen();
