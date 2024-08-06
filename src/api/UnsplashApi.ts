@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
+const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 const UNSPLASH_API_URL = 'https://api.unsplash.com/photos/random';
 
 export const fetchWallpapers = async (page: number = 1, perPage: number = 10) => {
