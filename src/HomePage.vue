@@ -81,9 +81,9 @@ export default defineComponent({
       const imgWidth = img.clientWidth;
       const clickX = event.clientX - imgElement.getBoundingClientRect().left;
 
-      if (clickX < imgWidth / 2) {
+      if (clickX < imgWidth / 3) {
         prevWallpaper();
-      } else if (clickX > imgWidth / 2) {
+      } else if (clickX > imgWidth / 6) {
         nextWallpaper();
       } else {
         openFullscreen();
