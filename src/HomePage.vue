@@ -2,13 +2,13 @@
   <div class="home" @touchstart="touchStart" @touchend="touchEnd">
     <h1>Wallpaper</h1>
     <div class="wallpaper-container" @click="handleClick">
-      <img :src="'' || currentWallpaper.urls?.small" :alt="currentWallpaper.alt_description" />
-      <p>{{ currentWallpaper.alt_description || '无描述' }}</p>
+      <img :src="currentWallpaper?.urls.small" :alt="currentWallpaper?.alt_description" />
+      <p>{{ currentWallpaper?.alt_description || '无描述' }}</p>
     </div>
 
     <!-- 全屏模态框 -->
     <div v-if="isFullscreen" class="fullscreen-modal" @click="closeFullscreen">
-      <img :src="'' || currentWallpaper.urls?.full" :alt="currentWallpaper.alt_description" class="fullscreen-image" />
+      <img :src="'' || currentWallpaper?.urls.full" :alt="currentWallpaper?.alt_description" class="fullscreen-image" />
     </div>
   </div>
 </template>
@@ -17,13 +17,21 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import { fetchWallpapers } from './api/UnsplashApi';
 
+interface Wallpaper {
+  urls: {
+    small: string;
+    full: string;
+  };
+  alt_description: string;
+  description?: string;
+}
 export default defineComponent({
   setup() {
-    const wallpapers = ref<any[]>([]);
-    const previousWallpapers = ref<any[]>([]);
+    const wallpapers = ref<Wallpaper[]>([]);
+    const previousWallpapers = ref<Wallpaper[]>([]);
     const currentIndex = ref(0);
-    const currentWallpaper = ref({});
-    const isFullscreen = ref(false); // 控制全屏状态
+    const currentWallpaper = ref<Wallpaper | null>(null);
+    const isFullscreen = ref(false);
 
     const loadWallpapers = async () => {
       try {
@@ -65,25 +73,29 @@ export default defineComponent({
     };
 
     const handleClick = (event: MouseEvent) => {
-      const imgElement = event.currentTarget.querySelector('img') as HTMLImageElement;
-      const imgWidth = imgElement.clientWidth;
-      const clickX = event.clientX - imgElement.getBoundingClientRect().left; // 获取点击位置相对于图片的坐标
+      const imgElement = event.currentTarget as HTMLElement;
+      const img = imgElement.querySelector('img') as HTMLImageElement;
+
+      if (!img) return;
+
+      const imgWidth = img.clientWidth;
+      const clickX = event.clientX - imgElement.getBoundingClientRect().left;
 
       if (clickX < imgWidth / 2) {
-        prevWallpaper(); // 点击左侧，向左滑动
+        prevWallpaper();
       } else if (clickX > imgWidth / 2) {
-        nextWallpaper(); // 点击右侧，向右滑动
+        nextWallpaper();
       } else {
-        openFullscreen(); // 点击中间，全屏显示
+        openFullscreen();
       }
     };
 
     const openFullscreen = () => {
-      isFullscreen.value = true; // 打开全屏
+      isFullscreen.value = true;
     };
 
     const closeFullscreen = () => {
-      isFullscreen.value = false; // 关闭全屏
+      isFullscreen.value = false;
     };
 
     // 手势滑动
@@ -96,9 +108,9 @@ export default defineComponent({
     const touchEnd = (event: TouchEvent) => {
       const endX = event.changedTouches[0].clientX;
       if (startX > endX + 50) {
-        nextWallpaper(); // 向左滑动
+        nextWallpaper();
       } else if (startX < endX - 50) {
-        prevWallpaper(); // 向右滑动
+        prevWallpaper();
       }
     };
 
