@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
+const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
 console.log(UNSPLASH_ACCESS_KEY);
 const UNSPLASH_API_URL = 'https://api.unsplash.com/photos/random';
 
